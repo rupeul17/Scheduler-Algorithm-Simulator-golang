@@ -6,13 +6,13 @@ type Job struct {
 	name         string
 	arrival_time int
 	service_time int
-	next
 }
 
 func init() {
 	fmt.Println("lib package > init start!")
 }
 
+/*
 func Get_Total_Length(Job job, int number_of_jobs) {
 	length := Job[0].arrival_time
 
@@ -30,3 +30,4 @@ func Get_Total_Length(Job job, int number_of_jobs) {
 
 	return length
 }
+*/

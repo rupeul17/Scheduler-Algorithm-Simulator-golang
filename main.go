@@ -5,6 +5,21 @@ import (
 	"os"
 )
 
+/*
+type Job struct {
+	name        	string
+	arrival_time 	int
+	service_time 	int
+	next			*Job
+}
+
+type Custom_Queue struct {
+	first			*Job
+	last			*Job
+	count			int
+}
+*/
+
 func main() {
 
 	var choice string
@@ -19,7 +34,7 @@ func main() {
 	fmt.Scanf("%d", &number_of_jobs)
 
 	// 구조체 배열 선언
-	var job [number_of_jobs]Job
+	job := make([]Job, number_of_jobs)
 
 	fmt.Printf("Please insert the jobs in order of their arrivals\n")
 
@@ -67,18 +82,20 @@ func main() {
 
 	// FIFO
 	FIFO(number_of_jobs, total_length, job, Result)
-	// Round Robin 1
-	Round_Robin(number_of_jobs, total_length, job, Result, time_slice_1)
-	// Round Robin 2
-	Round_Robin(number_of_jobs, total_length, job, Result, time_slice_2)
-	// SJF
-	Shortest_Job_First(job, Result, total_length, number_of_jobs)
-	// STCF
-	Shortest_To_Completion_First(job, Result, total_length, number_of_jobs)
-	// MLFQ 1
-	MLFQ(job, Result, total_length, number_of_jobs, 1)
-	// MLFQ 2
-	MLFQ(job, Result, total_length, number_of_jobs, time_slice_3)
-	// 결과 출력
-	Print_Result(Result, number_of_jobs, total_length)
+	/*
+		// Round Robin 1
+		Round_Robin(number_of_jobs, total_length, job, Result, time_slice_1)
+		// Round Robin 2
+		Round_Robin(number_of_jobs, total_length, job, Result, time_slice_2)
+		// SJF
+		Shortest_Job_First(job, Result, total_length, number_of_jobs)
+		// STCF
+		Shortest_To_Completion_First(job, Result, total_length, number_of_jobs)
+		// MLFQ 1
+		MLFQ(job, Result, total_length, number_of_jobs, 1)
+		// MLFQ 2
+		MLFQ(job, Result, total_length, number_of_jobs, time_slice_3)
+		// 결과 출력
+		Print_Result(Result, number_of_jobs, total_length)
+	*/
 }
