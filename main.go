@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"os"
 	"strings"
-	"time"
 )
 
 func main() {
@@ -16,15 +15,11 @@ func main() {
 	//time_slice_1 := 1
 	//time_slice_2 := 1
 	//time_slice_3 := 1
-	var Result [][7]string
 
 	// 파라미터 입력
 	fmt.Println("How many jobs would like to simulate? : ")
 
 	number_of_jobs := input_number()
-
-	fmt.Printf("OK, Simulator Info Setting... job's count : %d\n", number_of_jobs)
-	time.Sleep(1 * time.Second)
 
 	// 구조체 배열 선언
 	job := make([]lib.Job, number_of_jobs)
@@ -36,32 +31,22 @@ func main() {
 		job[i].Name = string(65 + i)
 
 		job[i].Arrival_Time = input_number()
-		fmt.Printf("OK, Simulator Info Setting... arrival_time : %d\n", job[i].Arrival_Time)
-		time.Sleep(1 * time.Second)
 
 		fmt.Printf("Insert Service Time of job[%c]:", 65+i)
 		job[i].Service_Time = input_number()
-		fmt.Printf("OK, Simulator Info Setting... service_time : %d\n", job[i].Service_Time)
-		time.Sleep(1 * time.Second)
 	}
 
 	fmt.Printf("Insert the value of time slice for Round Robin 1: ")
 	time_slice_1 := input_number()
 
-	fmt.Printf("OK, Simulator Info Setting... time slice for Round Robin 1 : %d\n", time_slice_1)
-	time.Sleep(1 * time.Second)
-
 	fmt.Printf("Insert the value of time slice for Round Robin 2: ")
 	time_slice_2 := input_number()
-
-	fmt.Printf("OK, Simulator Info Setting... time slice for Round Robin 2 : %d\n", time_slice_2)
-	time.Sleep(1 * time.Second)
 
 	fmt.Printf("Insert the value of time slice for MLFQ 2: ")
 	time_slice_3 := input_number()
 
-	fmt.Printf("OK, Simulator Info Setting... time slice for MLFQ 2 : %d\n", time_slice_3)
-	time.Sleep(1 * time.Second)
+	//fmt.Printf("OK, Simulator Info Setting... \n")
+	//time.Sleep(1 * time.Second)
 
 	fmt.Println()
 
@@ -90,12 +75,23 @@ func main() {
 	}
 
 	total_length = lib.Get_Total_Length(job, number_of_jobs)
+	Result := make([][]string, total_length)
+	for i := range Result {
+		Result[i] = make([]string, 7)
+	}
+	for i := 0; i < 7; i++ {
+		for j := 0; j < total_length; j++ {
+			Result[j][i] = string(0)
+		}
+	}
 
 	// FIFO
 	FIFO(number_of_jobs, total_length, job, Result)
+
+	// Round Robin 1
+	Round_Robin(number_of_jobs, total_length, job, Result, time_slice_1)
+
 	/*
-		// Round Robin 1
-		Round_Robin(number_of_jobs, total_length, job, Result, time_slice_1)
 		// Round Robin 2
 		Round_Robin(number_of_jobs, total_length, job, Result, time_slice_2)
 		// SJF

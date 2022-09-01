@@ -75,6 +75,8 @@ func queue_arrive_job(sec int, job []Job, size int) string {
 		}
 	}
 
+	return nil
+
 }
 */
 
