@@ -88,7 +88,6 @@ func Print_Result(Result [][]string, number_of_jobs int, total_length int) {
 			fmt.Fprintf(ResultFile, "%s  :       ", string(65+j))
 			for k := 0; k < total_length; k++ {
 				if Result[k][q] == string(65+j) {
-					//if strings.Compare(Result[k][q], string(65+1)) == 0 {
 					fmt.Fprintf(ResultFile, "===  ")
 				} else {
 					fmt.Fprintf(ResultFile, "     ")
@@ -97,7 +96,6 @@ func Print_Result(Result [][]string, number_of_jobs int, total_length int) {
 			fmt.Fprintf(ResultFile, "\n")
 		}
 		fmt.Fprintf(ResultFile, "\n\n")
-		q++
 	}
 }
 
@@ -136,15 +134,14 @@ func FIFO(number_of_jobs int, total_length int, job []lib.Job, Result [][]string
 	}
 }
 
-/*
-func Round_Robin(number_of_jobs int, total_length int, job []lib.Job, Result [][] string, time_slice int, version int) {
-	
+func Round_Robin(number_of_jobs int, total_length int, job []lib.Job, Result [][]string, time_slice int, version int) {
+
 	first_start := job[0].Arrival_Time
-	var queue lib.Queue 
-	lib.InitQueue(&queue);
+	var queue lib.Queue
+	lib.InitQueue(&queue)
 
 	for j := 0; j < number_of_jobs; j++ {
-		if(job[j].Arrival_Time == first_start) {
+		if job[j].Arrival_Time == first_start {
 			lib.PushQueue(&queue, &job[j])
 		}
 	}
@@ -158,72 +155,68 @@ func Round_Robin(number_of_jobs int, total_length int, job []lib.Job, Result [][
 				}
 			}
 		} else {
-			temp := lib.PopQueue(&queue);
-			for real_time_slice := time_slice; real_time_slice && !lib.IsJobDone(temp); real_time_slice-- {
+			temp := lib.PopQueue(&queue)
+			for real_time_slice := time_slice; real_time_slice > 0 && (lib.IsJobDone(temp) == 0); real_time_slice-- {
 				Result[i][version] = temp.Name
 				temp.Service_Time--
 				i++
 				for k := 0; k < number_of_jobs; k++ {
-					if job[k].Arrival_Time == i{
-					  lib.PushQueue(&queue, &job[k])
+					if job[k].Arrival_Time == i {
+						lib.PushQueue(&queue, &job[k])
 					}
 				}
 			}
 			if lib.IsJobDone(temp) == 0 {
-				lib.PushQueue(&queue, temp);
+				lib.PushQueue(&queue, temp)
 			}
 		}
 	}
 }
-*/
 
- //SJF
- func Shortest_Job_First(job []lib.Job, Result[][] string, total_length int, number_of_jobs int) {
+//SJF
+func Shortest_Job_First(job []lib.Job, Result [][]string, total_length int, number_of_jobs int) {
 
 	var executing lib.Job
-	var ready_queue lib.Queue	
-	lib.InitQueue(&ready_queue);
+	var ready_queue lib.Queue
+	var sec int
+	lib.InitQueue(&ready_queue)
 
-	executing.name = RN;
-	executing.service_time=-1;
+	executing.Name = lib.RN
+	executing.Service_Time = -1
 
-	for sec := 0; sec <= total_length; sec++ {
-		tmp := lib.queue_arrive_job(sec,job,number_of_jobs);
+	for sec = 0; sec <= total_length; sec++ {
+		tmp := lib.Queue_arrive_job(sec, job, number_of_jobs)
 
-		if(tmp!=RN)
-		{
-			PushQueue(&ready_queue, &job[(int)tmp-65]);
+		if tmp != lib.RN {
+			lib.PushQueue(&ready_queue, &job[(int(tmp[0])-65)])
 		}
 
-		if(executing.service_time==0) 
-		{
-			executing.name = RN;
-			if(sec==total_length)
-			{
-				break;
+		if executing.Service_Time == 0 {
+			executing.Name = lib.RN
+			if sec == total_length {
+				break
 			}
 		}
 
-		if(executing.name==RN&&ready_queue.count!=0)
-		{	
-			executing = priority(&ready_queue);
+		if executing.Name == lib.RN && ready_queue.Count != 0 {
+			executing = lib.Priority(&ready_queue)
 		}
-		
-		if(executing.name!=RN)
-		{
-			executing.service_time--;
-		}
-		
-		Result[sec][3]=executing.name;
-	}
-    }
 
+		if executing.Name != lib.RN {
+			executing.Service_Time--
+		}
+
+		Result[sec][3] = executing.Name
+	}
+}
+
+/*
     //STCF
-    void Shortest_To_Completion_First(Job job[], char Result[][7], int total_length, int number_of_jobs){
+    func Shortest_To_Completion_First(job []lib.Job, Result[][] string, total_length int, number_of_jobs int) {
     int i, j, sec;
 	Job executing, executing2;
 
-	Queue ready_queue;	
+	Queue ready_queue;
 	initQueue(&ready_queue);
 
 	executing.name = RN;
@@ -237,8 +230,8 @@ func Round_Robin(number_of_jobs int, total_length int, job []lib.Job, Result [][
 		{
 			PushQueue(&ready_queue, &job[(int)tmp-65]);
 		}
-		
-		if(executing.service_time==0) 
+
+		if(executing.service_time==0)
 		{
 			executing.name = RN;
 
@@ -247,12 +240,12 @@ func Round_Robin(number_of_jobs int, total_length int, job []lib.Job, Result [][
 				break;
 			}
 		}
-		
+
 		if(executing.name==RN && ready_queue.count!=0)
 		{
 			executing = priority(&ready_queue);
 		}
-		
+
 		if(ready_queue.count!=0 && executing.name!=RN)
 		{
 			executing2 = priority(&ready_queue);
@@ -281,7 +274,7 @@ func Round_Robin(number_of_jobs int, total_length int, job []lib.Job, Result [][
 				PushQueue(&ready_queue, &executing2);
 			}
 		}
-		
+
 		if(executing.name!=RN)
 		{
 			executing.service_time--;
@@ -290,3 +283,4 @@ func Round_Robin(number_of_jobs int, total_length int, job []lib.Job, Result [][
 		Result[sec][4]=executing.name;
 	}
     }
+*/

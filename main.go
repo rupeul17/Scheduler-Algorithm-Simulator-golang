@@ -89,13 +89,15 @@ func main() {
 	FIFO(number_of_jobs, total_length, job, Result)
 
 	// Round Robin 1
-	Round_Robin(number_of_jobs, total_length, job, Result, time_slice_1)
+	Round_Robin(number_of_jobs, total_length, job, Result, time_slice_1, 1)
 
+	// Round Robin 2
+
+	Round_Robin(number_of_jobs, total_length, job, Result, time_slice_2, 2)
+
+	// SJF
+	Shortest_Job_First(job, Result, total_length, number_of_jobs)
 	/*
-		// Round Robin 2
-		Round_Robin(number_of_jobs, total_length, job, Result, time_slice_2)
-		// SJF
-		Shortest_Job_First(job, Result, total_length, number_of_jobs)
 		// STCF
 		Shortest_To_Completion_First(job, Result, total_length, number_of_jobs)
 		// MLFQ 1
