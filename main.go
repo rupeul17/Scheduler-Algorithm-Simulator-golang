@@ -97,15 +97,16 @@ func main() {
 
 	// SJF
 	Shortest_Job_First(job, Result, total_length, number_of_jobs)
-	/*
-		// STCF
-		Shortest_To_Completion_First(job, Result, total_length, number_of_jobs)
-		// MLFQ 1
-		MLFQ(job, Result, total_length, number_of_jobs, 1)
-		// MLFQ 2
-		MLFQ(job, Result, total_length, number_of_jobs, time_slice_3)
-		// 결과 출력
-	*/
+
+	// STCF
+	Shortest_To_Completion_First(job, Result, total_length, number_of_jobs)
+
+	// MLFQ 1
+	MLFQ(job, Result, total_length, number_of_jobs, 1)
+	// MLFQ 2
+	MLFQ(job, Result, total_length, number_of_jobs, time_slice_3)
+	// 결과 출력
+
 	Print_Result(Result, number_of_jobs, total_length)
 
 }
