@@ -1,7 +1,7 @@
 package main
 
 import (
-	"Scheduling/lib"
+	"Scheduling-Algorithm-Simulator-golang/lib"
 	"bufio"
 	"fmt"
 	"log"
@@ -85,9 +85,9 @@ func Print_Result(Result [][]string, number_of_jobs int, total_length int) {
 
 		fmt.Fprintf(ResultFile, "\n")
 		for j := 0; j < number_of_jobs; j++ {
-			fmt.Fprintf(ResultFile, "%s  :       ", string(65+j))
+			fmt.Fprintf(ResultFile, "%s  :       ", string(rune(65+j)))
 			for k := 0; k < total_length; k++ {
-				if Result[k][q] == string(65+j) {
+				if Result[k][q] == string(rune(65+j)) {
 					fmt.Fprintf(ResultFile, "===  ")
 				} else {
 					fmt.Fprintf(ResultFile, "     ")
@@ -302,13 +302,23 @@ func Shortest_To_Completion_First(job []lib.Job, Result [][]string, total_length
 	executing.Name = lib.RN
 	executing.Service_Time = -1
 
+	/*
+		스케줄링을 반복한다.
+	*/
 	for sec := 0; sec <= total_length; sec++ {
 
+		/*
+			현재 시간에 도착한 job이 있는지 확인하여
+			있다면 queue에 넣는다.
+		*/
 		tmp := lib.Queue_arrive_job(sec, job, number_of_jobs)
 		if tmp != lib.RN {
 			lib.PushQueue(&ready_queue, &job[(int)(tmp[0])-65])
 		}
 
+		/*
+			현재 실행중인 job이 끝났고, 마지막 job 이었으면 끝낸다.
+		*/
 		if executing.Service_Time == 0 {
 			executing.Name = lib.RN
 
@@ -317,16 +327,33 @@ func Shortest_To_Completion_First(job []lib.Job, Result [][]string, total_length
 			}
 		}
 
+		/*
+			현재 실행중인 job이 없고 queue에 job이 들어있으면
+			우선순위를 따져서 job을 가져온다.
+		*/
 		if (executing.Name == lib.RN) && (ready_queue.Count != 0) {
 			executing = lib.Priority(&ready_queue)
 		}
 
+		/*
+			현재 실행중인 job이 있고 queue에 job이 들어있으면
+			우선순위를 따져서 job을 가져온다.
+		*/
 		if (ready_queue.Count != 0) && (executing.Name != lib.RN) {
 			executing2 = lib.Priority(&ready_queue)
 			if executing.Service_Time > executing2.Service_Time {
+				/*
+					새로 가져온 Job의 실행 시간이 실행 중인 Job보다 작으면
+					기존에 실행 중이던 Job을 ready queue 에 넣고
+					꺼냈던 Job을 실행한다.
+				*/
 				lib.PushQueue(&ready_queue, &executing)
 				executing = executing2
 			} else if executing.Service_Time == executing2.Service_Time {
+				/*
+					새로 가져온 Job의 실행 시간 == 실행 중인 Job의 실행 시간 이면
+					이름이 작은 것부터 실행한다.
+				*/
 				if executing.Name < executing2.Name {
 					lib.PushQueue(&ready_queue, &executing2)
 				} else {
@@ -334,11 +361,18 @@ func Shortest_To_Completion_First(job []lib.Job, Result [][]string, total_length
 					executing = executing2
 				}
 			} else {
+				/*
+					기존 실행 Job의 실행 시간이 크면
+					꺼냈던 Job은 다시 넣는다.
+				*/
 				lib.PushQueue(&ready_queue, &executing2)
 			}
 		}
 
 		if executing.Name != lib.RN {
+			/*
+				실행 Job이 있으면 실행 시간을 차감한다.
+			*/
 			executing.Service_Time--
 		}
 
@@ -359,7 +393,7 @@ func MLFQ(job []lib.Job, Result [][]string, total_length int, number_of_jobs int
 		MLFQ 2 에 기록한다.
 	*/
 	for i := 0; i < total_length; i++ {
-		if Result[i][5] != string(0) {
+		if Result[i][5] != string(rune(0)) {
 			version = 6
 			break
 		}
