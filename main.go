@@ -1,7 +1,7 @@
 package main
 
 import (
-	"Scheduling/lib"
+	"Scheduling-Algorithm-Simulator-golang/lib"
 	"fmt"
 	"os"
 	"strings"
@@ -10,25 +10,21 @@ import (
 func main() {
 
 	var choice string
-	//number_of_jobs := 0
 	total_length := 0
-	//time_slice_1 := 1
-	//time_slice_2 := 1
-	//time_slice_3 := 1
 
-	// 파라미터 입력
+	/* 프로세스 (Job) 개수 입력 */
 	fmt.Println("How many jobs would like to simulate? : ")
 
 	number_of_jobs := input_number()
 
-	// 구조체 배열 선언
 	job := make([]lib.Job, number_of_jobs)
 
+	/* 프로세스 별 도착 시간, 실행 시간 입력 */
 	fmt.Printf("Please insert the jobs in order of their arrivals\n")
 
 	for i := 0; i < number_of_jobs; i++ {
-		fmt.Printf("Insert Arrival Time of job[%c]:", 65+i)
-		job[i].Name = string(65 + i)
+		fmt.Printf("Insert Arrival Time of job[%c]:", rune(65+i))
+		job[i].Name = string(rune(65 + i))
 
 		job[i].Arrival_Time = input_number()
 
@@ -36,6 +32,7 @@ func main() {
 		job[i].Service_Time = input_number()
 	}
 
+	/* 스케줄링 알고리즘 설정 입력 */
 	fmt.Printf("Insert the value of time slice for Round Robin 1: ")
 	time_slice_1 := input_number()
 
@@ -45,12 +42,9 @@ func main() {
 	fmt.Printf("Insert the value of time slice for MLFQ 2: ")
 	time_slice_3 := input_number()
 
-	//fmt.Printf("OK, Simulator Info Setting... \n")
-	//time.Sleep(1 * time.Second)
-
 	fmt.Println()
 
-	// 입력받은 값 확인
+	/* 시뮬레이터 설정 값 확인 */
 	fmt.Printf("Job\tArrival Time\tService Time\n")
 	for i := 0; i < number_of_jobs; i++ {
 		fmt.Printf("%s\t%d\t\t%d \n", job[i].Name, job[i].Arrival_Time, job[i].Service_Time)
@@ -81,32 +75,30 @@ func main() {
 	}
 	for i := 0; i < 7; i++ {
 		for j := 0; j < total_length; j++ {
-			Result[j][i] = string(0)
+			Result[j][i] = string(rune(0))
 		}
 	}
 
-	// FIFO
+	/* FIFO (First In First Out) */
 	FIFO(number_of_jobs, total_length, job, Result)
 
-	// Round Robin 1
+	/* Round_Robin 1 */
 	Round_Robin(number_of_jobs, total_length, job, Result, time_slice_1, 1)
 
-	// Round Robin 2
-
+	/* Round Robin 2 */
 	Round_Robin(number_of_jobs, total_length, job, Result, time_slice_2, 2)
 
-	// SJF
+	/* SJF (Shortest Job First) */
 	Shortest_Job_First(job, Result, total_length, number_of_jobs)
 
-	// STCF
+	/* STCF (Shortest To Completion First) */
 	Shortest_To_Completion_First(job, Result, total_length, number_of_jobs)
 
-	// MLFQ 1
+	/* MLFQ (Multi Level Feedback Queue) 1 */
 	MLFQ(job, Result, total_length, number_of_jobs, 1)
-	// MLFQ 2
+	/* MLFQ (Multi Level Feedback Queue) 2 */
 	MLFQ(job, Result, total_length, number_of_jobs, time_slice_3)
-	// 결과 출력
 
+	/* 결과 출력 */
 	Print_Result(Result, number_of_jobs, total_length)
-
 }
